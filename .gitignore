@@ -1,0 +1,24 @@
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# Package Files #
+*.jar
+*.war
+*.nar
+*.ear
+*.tar.gz
+*.rar
+
+# IDEA project settings
+.idea/
+
+# Gradle
+.gradle
+gradle
+/build/
+
+# Default folder for compilation files in IDEA
+out/
