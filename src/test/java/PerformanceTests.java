@@ -1,7 +1,7 @@
 import com.github.noconnor.junitperf.*;
 import com.github.noconnor.junitperf.data.TestContext;
 import com.github.noconnor.junitperf.reporting.providers.ConsoleReportGenerator;
-import com.github.noconnor.junitperf.reporting.providers.CsvReportGenerator;
+import com.github.noconnor.junitperf.reporting.providers.HtmlReportGenerator;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,8 +20,8 @@ public class PerformanceTests {
 
     @JUnitPerfTestActiveConfig
     private final static JUnitPerfReportingConfig PERF_CONFIG = JUnitPerfReportingConfig.builder()
-            .reportGenerator(new CsvReportGenerator(new File("").getAbsolutePath() + S + "reports" + S +
-                    new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + "_TestReport.csv"))
+            .reportGenerator(new HtmlReportGenerator(new File("").getAbsolutePath() + S + "reports" + S +
+                    new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + "_TestReport.html"))
             .reportGenerator(new ConsoleReportGenerator())
             .build();
 
@@ -62,16 +62,20 @@ public class PerformanceTests {
     }
 
     // Accesses a method which has a 90% to return 200, but in 10% returns 500.
-    // Since this test has an allowed fail threshold set at 20%, this test will fail.
+    // Since this test has an allowed fail threshold set at 5%, this test will fail.
     @Test
     @JUnitPerfTest(threads = 30, durationMs = 10_000, maxExecutionsPerSecond = 500)
-    @JUnitPerfTestRequirement(allowedErrorPercentage = 0.20F)
+    @JUnitPerfTestRequirement(allowedErrorPercentage = 0.05F)
     public void stressRandomFail() {
         Requests.getFail().then().statusCode(200);
     }
 
+    // Asynchronous test which uses several threads within the threaded test.
+    // Simulates simultaneous addition and deletion of data.
+    // Also has throughput pass requirement set at 100 tests per sec minimum.
     @Test
     @JUnitPerfTest(threads = 30, durationMs = 10_000, maxExecutionsPerSecond = 500)
+    @JUnitPerfTestRequirement(executionsPerSec = 100)
     public void stressAddAndDelete(TestContextSupplier supplier) {
         TestContext context = supplier.startMeasurement();
         ExecutorService threadPool = Executors.newFixedThreadPool(5);
