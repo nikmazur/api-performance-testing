@@ -41,7 +41,7 @@ public class PerformanceTests {
     @Order(1)
     @JUnitPerfTest(threads = 30, durationMs = 10_000, maxExecutionsPerSecond = 500)
     public void stressAddData() {
-        Requests.addData(RandomUtils.nextLong(100_000_000, 999_999_999)).then().statusCode(200);
+        Requests.addData(RandomUtils.nextLong(100_000_000_000L, 999_999_999_999L)).then().statusCode(200);
     }
 
     // Deletes a single number from the list which were added in previous test (hence the order number)
@@ -80,7 +80,7 @@ public class PerformanceTests {
         TestContext context = supplier.startMeasurement();
         ExecutorService threadPool = Executors.newFixedThreadPool(5);
         threadPool.submit( () -> {
-            Requests.addData(RandomUtils.nextLong(100_000_000, 999_999_999)).then().statusCode(200);
+            Requests.addData(RandomUtils.nextLong(100_000_000_000L, 999_999_999_999L)).then().statusCode(200);
             Requests.deleteData().then().statusCode(200);
             context.success();
         });
