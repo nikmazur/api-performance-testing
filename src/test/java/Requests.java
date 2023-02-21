@@ -5,6 +5,9 @@ import static io.restassured.RestAssured.given;
 
 public class Requests {
 
+    private Requests() {
+    }
+
     private static RequestSpecification baseRequest() {
         return given().baseUri("http://localhost:8189");
     }

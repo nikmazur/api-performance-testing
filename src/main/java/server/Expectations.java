@@ -1,4 +1,5 @@
-import com.fasterxml.jackson.core.JsonProcessingException;
+package server;
+
 import org.apache.commons.lang3.RandomUtils;
 import org.mockserver.client.MockServerClient;
 
@@ -11,11 +12,14 @@ import static org.mockserver.model.HttpResponse.response;
 
 public class Expectations {
 
-    private static MockServerClient mockServerClient = new MockServerClient("localhost", 8189);
-    private static List<Long> data = Collections.synchronizedList(new ArrayList<>());
+    private static final MockServerClient MOCK_SERVER_CLIENT = new MockServerClient("localhost", 8189);
+    private static final List<Long> DATA = Collections.synchronizedList(new ArrayList<>());
+
+    private Expectations() {
+    }
 
     public static void status() {
-        mockServerClient
+        MOCK_SERVER_CLIENT
                 .when(
                         request().withMethod("GET").withPath("/status"))
                 .respond(
@@ -23,31 +27,31 @@ public class Expectations {
     }
 
     public static void addData() {
-        mockServerClient
+        MOCK_SERVER_CLIENT
                 .when(
                         request().withMethod("PUT").withPath("/data"))
                 .respond(
                         httpRequest -> {
-                            data.add(Long.valueOf((String) httpRequest.getBody().getValue()));
-                            return response().withStatusCode(200).withBody(data.toString());
+                            DATA.add(Long.valueOf((String) httpRequest.getBody().getValue()));
+                            return response().withStatusCode(200).withBody(DATA.toString());
                         }
                 );
     }
 
     public static void delData() {
-        mockServerClient
+        MOCK_SERVER_CLIENT
                 .when(
                         request().withMethod("DELETE").withPath("/data"))
                 .respond(
                         httpRequest -> {
-                            data.remove(0);
-                            return response().withStatusCode(200).withBody(data.toString());
+                            DATA.remove(0);
+                            return response().withStatusCode(200).withBody(DATA.toString());
                         }
                 );
     }
 
     public static void delayResp() {
-        mockServerClient
+        MOCK_SERVER_CLIENT
                 .when(
                         request().withMethod("GET").withPath("/delay"))
                 .respond(
@@ -59,7 +63,7 @@ public class Expectations {
 
     // 10% chance of returning 500 (Server error)
     public static void randomFail() {
-        mockServerClient
+        MOCK_SERVER_CLIENT
                 .when(
                         request().withMethod("GET").withPath("/fail"))
                 .respond(

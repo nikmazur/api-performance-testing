@@ -1,3 +1,5 @@
+package server;
+
 import org.mockserver.configuration.ConfigurationProperties;
 import org.mockserver.integration.ClientAndServer;
 

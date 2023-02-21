@@ -5,6 +5,7 @@ import com.github.noconnor.junitperf.reporting.providers.HtmlReportGenerator;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import server.RunServer;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
