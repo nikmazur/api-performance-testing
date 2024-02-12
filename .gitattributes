@@ -1,0 +1,2 @@
+# Ignore HTML files (Test Report)
+*.html linguist-detectable=false
